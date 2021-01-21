@@ -83,7 +83,8 @@ $(function() {
    * @param imageData
    */
   function insertImage(imageData) {
-    $('#images').prepend("<? $str = '" + imageData + "' echo base64_decode($str); ?>");
+    const image =  atob(imageData);
+    $('#images').prepend("<img src=" + image + " />");
   }
 
   /**
