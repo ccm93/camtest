@@ -83,7 +83,7 @@ $(function() {
    * @param imageData
    */
   function insertImage(imageData) {
-    $('#images').prepend("<img src=" + imageData + " />");
+    $('#images').prepend("<? $str = '" + imageData + "'?>");
   }
 
   /**
