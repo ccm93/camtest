@@ -83,10 +83,11 @@ $(function() {
    * @param imageData
    */
   function insertImage(imageData) {
-      var decode = window.atob(imageData);
-    const image = decodeURIComponent(decode);
+       alert(imageData);
+     // var decode = window.atob(imageData);
+    //const image = decodeURIComponent(decode);
     
-    $('#images').prepend("<img src=" + image + " />");
+    $('#images').prepend("<img src=" + imageData + " />");
   }
 
   /**
