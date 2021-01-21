@@ -75,20 +75,36 @@ $(function() {
   function capture() {
     const context = canvasEl.getContext('2d');
     context.drawImage(videoEl, 0, 0, width, height);
-    insertImage(canvasEl.toDataURL('image/jpg'));
+    insertImage(canvasEl.toDataURL('image/jpeg',1.0));
   }
 
   /**
    * 캡쳐한 이미지 노출 함수
    * @param imageData
    */
-  function insertImage(imageData) {
+    
+    function insertImage(imageData, filename) {
+    var arr = imageData.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = window.atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], jpge, {
+        type: mime
+    });
+        
+        
+}
+/*  function insertImage(imageData) {
        alert(imageData);
      // var decode = window.atob(imageData);
     //const image = decodeURIComponent(decode);
     
     $('#images').prepend("<img src=" + imageData + " />");
-  }
+  }*/
 
   /**
    * 초기 이벤트 바인딩
