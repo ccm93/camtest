@@ -12,30 +12,24 @@
 <br>
 <button id="btn1">Start</button>
 <script>
-    
+$(document).ready(function() {
+  var vid1 = $("#vid1")[0];
+  var btn1 = $("#btn1")[0];
+  
+  $(btn1).click(start);
 
-
-navigator.getUserMedia  = navigator.getUserMedia ||
-                          navigator.webkitGetUserMedia ||
-                          navigator.mozGetUserMedia ||
-                          navigator.msGetUserMedia;
-
-var video = document.querySelector('video');
-
-if (navigator.getUserMedia) {
-  navigator.mediaDevices.getUserMedia({audio: false, video: true}, function(stream) {
-    video.src = window.URL.createObjectURL(stream);
-  }, errorCallback);
-} else {
-  video.src = 'somevideo.webm'; // fallback.
-}
-      
-      
-  var errorCallback = function(e) {
-    console.log('Reeeejected!', e);
-  };
-
- 
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.oGetUserMedia || navigator.msGetUserMedia;
+  URL = window.URL || window.webkitURL || window.mozURL || window.oURL || window.msURL;
+  
+  function start() {
+    $(btn1).attr('disabled', true);
+    navigator.getUserMedia({audio:true, video:true}, gotStream, function(err) {console(err);});
+  }
+  
+  function gotStream(stream){
+    vid1.src = URL.createObjectURL(stream);
+  }
+});
 </script>
 </body>
 </html>
