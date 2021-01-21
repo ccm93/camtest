@@ -33,30 +33,7 @@ if (navigator.getUserMedia) {
     console.log('Reeeejected!', e);
   };
 
-    var hdConstraints = {
-  video: {
-    mandatory: {
-      minWidth: 1280,
-      minHeight: 720
-    }
-  }
-};
-
-navigator.mediaDevices.getUserMedia(hdConstraints, successCallback, errorCallback);
-
-
-
-var vgaConstraints = {
-  video: {
-    mandatory: {
-      maxWidth: 640,
-      maxHeight: 360
-    }
-  }
-};
-
-navigator.mediaDevices.getUserMedia(vgaConstraints, successCallback, errorCallback);
-
+ 
 </script>
 </body>
 </html>
