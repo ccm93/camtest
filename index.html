@@ -15,7 +15,7 @@
   };
 
   // Not showing vendor prefixes.
-  navigator.getUserMedia({video: true, audio: true}, function(localMediaStream) {
+  navigator.mediaDevices.getUserMedia({video: true, audio: true}, function(localMediaStream) {
     var video = document.querySelector('video');
     video.src = window.URL.createObjectURL(localMediaStream);
 
