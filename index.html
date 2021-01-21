@@ -20,6 +20,15 @@
           display: block;
           margin-bottom: 5px;
         }
+        .pic{
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+        height: 400px;
+        border: 1px solid black;
+        text-align: center;
+    }
     </style>
 </head>
     <body>
@@ -34,16 +43,50 @@
       </div>
     </div>
     <button id="btn-camera">1. 비디오출력</button>
-    <button id="btn-capture">2. 캡쳐</button>
+    <button id="btn-capture" ><a download="my_painting.png">2. 캡쳐</a></button>
     <hr />
+     <form action="test.php" name="frm" method="POST" enctype="multipart/form-data" >
+        <table class="joinTable">
 
+                    <div class="pic" > 
+                        <img id="pic" style="width:100%;" />
+                    </div><br><br>
+
+                   
+                    <tr>
+                        <th>사진</th>
+                        <td><input type="file" id="camera" name="camera" capture="user" accept="image/*" required></td>
+
+                    </tr>
+
+                <tr>
+
+                    <td colspan="">
+                        <input type="button" value="회원가입" onclick="join()">
+                        
+                    </td>
+                </tr>
+        
+          
+            </table>
+    </form>
     <div id="output">
       <strong>Capture images</strong>
-      <div id="images"></div>
+      <div id="images"><??></div>
     </div>
      </div>
      </div>
 <script>
+document.querySelector('a').addEventListener('click', event =>
+  event.target.href = canvas.toDataURL()
+);
+
+  $(function(){
+    $('#camera').change(function(e){
+        $('#pic').attr('src', URL.createObjectURL(e.target.files[0]));
+    });
+}); 
+
 $(function() {
   navigator.getUserMedia = navigator.getUserMedia ||
     navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
