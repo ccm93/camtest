@@ -7,29 +7,63 @@
     <title>Camera Web App</title>
     <script src="jquery.min.js"></script>
 </head>
-<body>
-<video id="vid1" autoplay></video>
-<br>
-<button id="btn1">Start</button>
-<script>
-$(document).ready(function() {
-  var vid1 = $("#vid1")[0];
-  var btn1 = $("#btn1")[0];
-  
-  $(btn1).click(start);
+    <body>
+<div id="container">
+    <span>getUserMedia</span></h1>
 
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.oGetUserMedia || navigator.msGetUserMedia;
-  URL = window.URL || window.webkitURL || window.mozURL || window.oURL || window.msURL;
-  
-  function start() {
-    $(btn1).attr('disabled', true);
-    navigator.getUserMedia({audio:true, video:true}, gotStream, function(err) {console(err);});
+    <video id="gum-local" autoplay playsinline></video>
+    <button id="showVideo">Open camera</button>
+
+    <div id="errorMsg"></div>
+<script>
+'use strict';
+
+// Put variables in global scope to make them available to the browser console.
+const constraints = window.constraints = {
+  audio: false,
+  video: true
+};
+
+function handleSuccess(stream) {
+  const video = document.querySelector('video');
+  const videoTracks = stream.getVideoTracks();
+  console.log('Got stream with constraints:', constraints);
+  console.log(`Using video device: ${videoTracks[0].label}`);
+  window.stream = stream; // make variable available to browser console
+  video.srcObject = stream;
+}
+
+function handleError(error) {
+  if (error.name === 'ConstraintNotSatisfiedError') {
+    const v = constraints.video;
+    errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
+  } else if (error.name === 'PermissionDeniedError') {
+    errorMsg('Permissions have not been granted to use your camera and ' +
+      'microphone, you need to allow the page access to your devices in ' +
+      'order for the demo to work.');
   }
-  
-  function gotStream(stream){
-    vid1.src = URL.createObjectURL(stream);
+  errorMsg(`getUserMedia error: ${error.name}`, error);
+}
+
+function errorMsg(msg, error) {
+  const errorElement = document.querySelector('#errorMsg');
+  errorElement.innerHTML += `<p>${msg}</p>`;
+  if (typeof error !== 'undefined') {
+    console.error(error);
   }
-});
+}
+
+async function init(e) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+    e.target.disabled = true;
+  } catch (e) {
+    handleError(e);
+  }
+}
+
+document.querySelector('#showVideo').addEventListener('click', e => init(e));
 </script>
 </body>
 </html>
