@@ -75,7 +75,8 @@ $(function() {
   function capture() {
     const context = canvasEl.getContext('2d');
     context.drawImage(videoEl, 0, 0, width, height);
-    insertImage(canvasEl.toDataURL('image/jpeg',1.0));
+    var file = insertImage(canvasEl.toDataURL('image/jpeg',1.0));
+       console.log(file);
   }
 
   /**
