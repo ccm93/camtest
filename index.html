@@ -6,64 +6,102 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Camera Web App</title>
     <script src="jquery.min.js"></script>
+    <style>
+        video, canvas {
+          border: solid 1px #000;
+        }
+
+        img {
+          width: 170px;
+          margin: 0 5px;
+        }
+
+        #output strong {
+          display: block;
+          margin-bottom: 5px;
+        }
+    </style>
 </head>
     <body>
-<div id="container">
-    <span>getUserMedia</span></h1>
+<div id="content">
+  <div class="wrap">
+    <div class="two-peace">
+      <div>
+        <video id="video" width="350" height="260" autoplay></video>
+      </div>
+      <div>
+        <canvas id="canvas" width="350" height="260"></canvas>
+      </div>
+    </div>
+    <button id="btn-camera">1. 비디오출력</button>
+    <button id="btn-capture">2. 캡쳐</button>
+    <hr />
 
-    <video id="gum-local" autoplay playsinline></video>
-    <button id="showVideo">Open camera</button>
-
-    <div id="errorMsg"></div>
+    <div id="output">
+      <strong>Capture images</strong>
+      <div id="images"></div>
+    </div>
+     </div>
+     </div>
 <script>
-'use strict';
+$(function() {
+  navigator.getUserMedia = navigator.getUserMedia ||
+    navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-// Put variables in global scope to make them available to the browser console.
-const constraints = window.constraints = {
-  audio: false,
-  video: true
-};
+  const videoEl = document.getElementById('video');
+  const canvasEl = document.getElementById('canvas');
+  const width = 350;
+  const height = 260;
 
-function handleSuccess(stream) {
-  const video = document.querySelector('video');
-  const videoTracks = stream.getVideoTracks();
-  console.log('Got stream with constraints:', constraints);
-  console.log(`Using video device: ${videoTracks[0].label}`);
-  window.stream = stream; // make variable available to browser console
-  video.srcObject = stream;
-}
-
-function handleError(error) {
-  if (error.name === 'ConstraintNotSatisfiedError') {
-    const v = constraints.video;
-    errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
-  } else if (error.name === 'PermissionDeniedError') {
-    errorMsg('Permissions have not been granted to use your camera and ' +
-      'microphone, you need to allow the page access to your devices in ' +
-      'order for the demo to work.');
+  /**
+   * getUserMedia 성공
+   * @param stream
+   */
+  function success(stream) {
+    videoEl.srcObject = stream;
   }
-  errorMsg(`getUserMedia error: ${error.name}`, error);
-}
 
-function errorMsg(msg, error) {
-  const errorElement = document.querySelector('#errorMsg');
-  errorElement.innerHTML += `<p>${msg}</p>`;
-  if (typeof error !== 'undefined') {
-    console.error(error);
+  /**
+   * getUserMedia 실패
+   * @param err
+   */
+  function error(err) {
+    console.log('error', arguments);
   }
-}
 
-async function init(e) {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-    e.target.disabled = true;
-  } catch (e) {
-    handleError(e);
+  /**
+   * 비디오 이미지 캡쳐
+   */
+  function capture() {
+    const context = canvasEl.getContext('2d');
+    context.drawImage(videoEl, 0, 0, width, height);
+    insertImage(canvasEl.toDataURL('image/png'));
   }
-}
 
-document.querySelector('#showVideo').addEventListener('click', e => init(e));
+  /**
+   * 캡쳐한 이미지 노출 함수
+   * @param imageData
+   */
+  function insertImage(imageData) {
+    $('#images').prepend("<img src=" + imageData + " />");
+  }
+
+  /**
+   * 초기 이벤트 바인딩
+   */
+  function initialize() {
+    canvasEl.width = width;
+    canvasEl.height = height;
+
+    $('#btn-camera').click(function() {
+      // getUserMedia(접근할 미디어, 성공 callback, 실패 callback);
+      navigator.getUserMedia({ audio: false, video: true }, success, error);
+    });
+
+    $('#btn-capture').click(capture);
+  }
+  initialize();
+});
 </script>
 </body>
 </html>
