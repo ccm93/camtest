@@ -83,7 +83,7 @@ $(function() {
    * @param imageData
    */
     
-    function insertImage(imageData, filename) {
+    function insertImage(imageData) {
     var arr = imageData.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = window.atob(arr[1]),
@@ -92,7 +92,7 @@ $(function() {
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], jpeg, {
+    return new File([u8arr], test.jpeg, {
         type: mime
     });
         
