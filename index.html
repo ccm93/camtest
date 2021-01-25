@@ -35,7 +35,10 @@
      </form>
  </div>
 <script>
-
+setTimeout(function() {
+  context.drawImage(video, 0, 0, 640, 480);
+}, 3000);
+	
 // Grab elements, create settings, etc.
 var video = document.getElementById('video');
 
