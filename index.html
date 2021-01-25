@@ -11,7 +11,7 @@
           border: solid 1px #000;
         }
 		// video 거울반전
-        video{         
+        video,canvas{         
 		transform: rotateY(180deg); 
 		-webkit-transform:rotateY(180deg); 
 		-moz-transform:rotateY(180deg);
@@ -64,15 +64,6 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 document.getElementById("snap").addEventListener("click", function() {
 	context.drawImage(video, 0, 0, 300, 400);
 });
-// canvas 거울반전
-(function loop(){
-	context.save(); 
-	context.scale(-1, 1); 
-	context.translate(-200, 0); 
-	context.drawImage(video, 0, 0, 200, 200); 
-	context.restore();  
-	requestAnimationFrame(loop); 
-})();
 
 </script>
 </body>
