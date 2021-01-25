@@ -16,39 +16,23 @@
 </head>
     <body>
 <div id="content">
-  <div class="wrap">
-    <div class="two-peace">
-     <video id="video" width="300" height="400" autoplay></video>
+    <video id="video" width="300" height="400" autoplay></video>
     <button id="snap">Snap Photo</button>
     <canvas id="canvas" width="300" height="400"></canvas>
-    </div>
-      
-      <form action="test.php" name="frm" method="POST" enctype="multipart/form-data" >
+    <form action="test.php" name="frm" method="POST" enctype="multipart/form-data" >
         <table class="joinTable">
+	    <tr>
+		<th>NAME</th>
+		<td><input class="text" id="user_name" name="user_name" type="text" ></td>
+	    </tr>
+	    <tr>
+		<td colspan="">
+		    <input type="button" value="회원가입" onclick="join()">
 
-                    <tr>
-                        <th>NAME</th>
-                        <td><input class="text" id="user_name" name="user_name" type="text" ></td>
-                    </tr>
-                    <tr>
-                        <th>사진</th>
-                        <td><input type="file" id="camera" name="camera" capture="user" accept="image/*" required></td>
-
-                    </tr>
-
-                <tr>
-
-                    <td colspan="">
-                        <input type="button" value="회원가입" onclick="join()">
-                        
-                    </td>
-                </tr>
-        
-          
-            </table>
-      </form>
-   
-   </div>
+		</td>
+	    </tr>
+         </table>
+     </form>
  </div>
 <script>
 
