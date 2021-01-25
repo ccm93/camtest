@@ -35,24 +35,18 @@
 <div id="content">
   <div class="wrap">
     <div class="two-peace">
-      <div>
-        <video id="video" width="300" height="400" autoplay></video>
-      </div>
-      <div>
-        <canvas id="canvas" width="300" height="400"></canvas>
-      </div>
+     <video id="video" width="640" height="480" autoplay></video>
+    <button id="snap">Snap Photo</button>
+    <canvas id="canvas" width="640" height="480"></canvas>
     </div>
-    <button id="btn-camera">1. 비디오출력</button>
-    <button id="btn-capture" >2. 캡쳐</button>
-    <hr />
-     <form action="test.php" name="frm" method="POST" enctype="multipart/form-data" >
+      
+      <form action="test.php" name="frm" method="POST" enctype="multipart/form-data" >
         <table class="joinTable">
 
-                    <div class="pic" > 
-                        <img id="pic" style="width:100%;" />
-                    </div><br><br>
-
-                   
+                    <tr>
+                        <th>NAME</th>
+                        <td><input class="text" id="user_name" name="user_name" type="text" ></td>
+                    </tr>
                     <tr>
                         <th>사진</th>
                         <td><input type="file" id="camera" name="camera" capture="user" accept="image/*" required></td>
@@ -69,104 +63,34 @@
         
           
             </table>
-    </form>
-    <div id="output">
-      <strong>Capture images</strong>
-      <div id="images"><??></div>
-    </div>
-     </div>
-     </div>
+      </form>
+   
+   </div>
+ </div>
 <script>
 
+// Grab elements, create settings, etc.
+var video = document.getElementById('video');
 
-  $(function(){
-    $('#camera').change(function(e){
-        $('#pic').attr('src', URL.createObjectURL(e.target.files[0]));
+// Get access to the camera!
+if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    // Not adding `{ audio: true }` since we only want video now
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        //video.src = window.URL.createObjectURL(stream);
+        video.srcObject = stream;
+        video.play();
     });
-}); 
-
-$(function() {
-  navigator.getUserMedia = navigator.getUserMedia ||
-    navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-  const videoEl = document.getElementById('video');
-  const canvasEl = document.getElementById('canvas');
-  const width = 300;
-  const height = 400;
-
-  /**
-   * getUserMedia 성공
-   * @param stream
-   */
-  function success(stream) {
-    videoEl.srcObject = stream;
-  }
-
-  /**
-   * getUserMedia 실패
-   * @param err
-   */
-  function error(err) {
-    console.log('error', arguments);
-  }
-
-  /**
-   * 비디오 이미지 캡쳐
-   */
-  function capture() {
-    const context = canvasEl.getContext('2d');
-    context.drawImage(videoEl, 0, 0, width, height);
-    var file = insertImage(canvasEl.toDataURL('image/jpeg',1.0));
-           
-
-  }
-
-  /**
-   * 캡쳐한 이미지 노출 함수
-   * @param imageData
-   */
-    
-    function insertImage(imageData) {
-    var arr = imageData.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = window.atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new File([u8arr], 'hello.jpg', {
-        type: mime
-    });
-         console.log(file);
-        
 }
-/*  function insertImage(imageData) {
-       alert(imageData);
-     // var decode = window.atob(imageData);
-    //const image = decodeURIComponent(decode);
     
-    $('#images').prepend("<img src=" + imageData + " />");
-  }*/
+    // Elements for taking the snapshot
+var canvas = document.getElementById('canvas');
+var context = canvas.getContext('2d');
+var video = document.getElementById('video');
 
-  /**
-   * 초기 이벤트 바인딩
-   */
-  function initialize() {
-    canvasEl.width = width;
-    canvasEl.height = height;
-
-    $('#btn-camera').click(function() {
-      // getUserMedia(접근할 미디어, 성공 callback, 실패 callback);
-      navigator.getUserMedia({ audio: false, video: true }, success, error);
-    });
-
-    $('#btn-capture').click(capture);
-  }
-  initialize();
+// Trigger photo take
+document.getElementById("snap").addEventListener("click", function() {
+	context.drawImage(video, 0, 0, 640, 480);
 });
-    
-
 </script>
 </body>
 </html>
